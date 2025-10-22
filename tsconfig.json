@@ -1,0 +1,18 @@
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2020", // Target modern JavaScript for the browser
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true, // Recommended for better code quality
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    // Output settings
+    "outDir": "./dist",
+    "rootDir": "./src",
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts"], // Include all .ts files in src
+  "exclude": ["node_modules"]
+}
