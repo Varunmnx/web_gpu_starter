@@ -14,6 +14,15 @@ declare module "*.frag" {
   const content: string;
   export default content;
 }
+declare module "*.png" {
+  const content: string;
+  export default content;
+}
+
+declare module "*.jpg" {
+  const content: string;
+  export default content;
+}
 
 // global.d.ts
 declare module 'three/examples/jsm/controls/OrbitControls';
