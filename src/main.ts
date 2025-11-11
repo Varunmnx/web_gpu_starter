@@ -27,6 +27,7 @@ export default class Sketch {
   positions: Float32Array | undefined;
   colors: Float32Array | undefined;
   instancesMesh: THREE.InstancedMesh | undefined;
+  length: number = 0;
 
   constructor(options: Options) {
     this.scene = new THREE.Scene();
@@ -54,6 +55,24 @@ export default class Sketch {
     this.setupResize();
   }
 
+  createAsciiTexture() {
+     let ascii = '$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,"^`\'. ';
+     let canvas = document.createElement('canvas');
+     let ctx = canvas.getContext('2d') as CanvasRenderingContext2D ;
+     this.length = ascii.length
+     canvas.width = this.length * 64
+     canvas.height = 64
+     ctx.font = '64px monospace'
+     ctx.fillStyle = '#000'
+     ctx.fillRect(0, 0, canvas.width, canvas.height)
+     ctx.fillStyle = '#fff'
+     for (let i = 0; i < ascii.length; i++) {
+       ctx.fillText(ascii[i], i * 64, 64)
+     }
+     return canvas
+    
+  }
+
   resize() {
     this.width = this.container.offsetWidth;
     this.height = this.container.offsetHeight;
@@ -77,7 +96,7 @@ export default class Sketch {
   }
 
   addObjects() {
-    this.material = getMaterial()
+    this.material = getMaterial();
 
     let rows = 50;
     let columns = 50;
@@ -114,7 +133,10 @@ export default class Sketch {
     }
 
     this.instancesMesh.instanceMatrix.needsUpdate = true;
-    this.geometry.setAttribute(GeometryAttribute.aPixelUV, new THREE.InstancedBufferAttribute(uv, 2));
+    this.geometry.setAttribute(
+      GeometryAttribute.aPixelUV,
+      new THREE.InstancedBufferAttribute(uv, 2)
+    );
     // ADD THIS LINE - Actually add the mesh to the scene!
     this.scene?.add(this.instancesMesh);
   }
