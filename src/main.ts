@@ -3,6 +3,7 @@ import * as THREE from "three/webgpu";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import GUI from "lil-gui";
 import { getMaterial } from "./utils/getMaterial";
+import { GeometryAttribute } from "./constants/attributes.geometry.enums";
 
 interface Options {
   dom: HTMLCanvasElement;
@@ -113,7 +114,7 @@ export default class Sketch {
     }
 
     this.instancesMesh.instanceMatrix.needsUpdate = true;
-
+    this.geometry.setAttribute(GeometryAttribute.aPixelUV, new THREE.InstancedBufferAttribute(uv, 2));
     // ADD THIS LINE - Actually add the mesh to the scene!
     this.scene?.add(this.instancesMesh);
   }
