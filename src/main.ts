@@ -56,20 +56,22 @@ export default class Sketch {
   }
 
   createAsciiTexture() {
-     let ascii = '$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,"^`\'. ';
+     let dict =  `.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@`
      let canvas = document.createElement('canvas');
      let ctx = canvas.getContext('2d') as CanvasRenderingContext2D ;
-     this.length = ascii.length
+     this.length = dict.length
      canvas.width = this.length * 64
      canvas.height = 64
      ctx.font = '64px monospace'
      ctx.fillStyle = '#000'
      ctx.fillRect(0, 0, canvas.width, canvas.height)
      ctx.fillStyle = '#fff'
-     for (let i = 0; i < ascii.length; i++) {
-       ctx.fillText(ascii[i], i * 64, 64)
+     for (let i = 0; i < dict.length; i++) {
+       ctx.fillText(dict[i], 32 + (i * 64), 40)
      }
-     return canvas
+     let asciiTexture = new THREE.Texture(canvas)
+     asciiTexture.needsUpdate = true
+     return asciiTexture
     
   }
 
@@ -96,7 +98,10 @@ export default class Sketch {
   }
 
   addObjects() {
-    this.material = getMaterial();
+    this.material = getMaterial({
+      asciiTexture:this.createAsciiTexture(),
+      length:this.length
+    });
 
     let rows = 50;
     let columns = 50;
@@ -104,8 +109,9 @@ export default class Sketch {
     let size = 0.1;
     this.geometry = new THREE.PlaneGeometry(size, size, 1, 1);
 
-    this.positions = new Float32Array(instances * 3);
-    this.colors = new Float32Array(instances * 3);
+    this.positions = new Float32Array(instances * 3); // 7500 values
+    this.colors = new Float32Array(instances * 3); // 7500 colors
+
     this.instancesMesh = new THREE.InstancedMesh(
       this.geometry,
       this.material,
@@ -116,19 +122,25 @@ export default class Sketch {
 
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
+
         let index = i * columns + j; // 0 to 2499
+        
         this.positions[index * 3] = i * size - (size * (rows - 1)) / 2; // -2.45 to 2.45
         this.positions[index * 3 + 1] = j * size - (size * (columns - 1)) / 2; // -2.45 to 2.45
-        this.positions[index * 3 + 2] = 0;
-        uv[index * 2] = i / (rows - 1);
-        uv[index * 2 + 1] = j / (columns - 1);
+        this.positions[index * 3 + 2] = 0; // z index always 0
+
+        uv[index * 2] = i / (rows - 1); // uv[0] t0 uv[2498]
+        uv[index * 2 + 1] = j / (columns - 1); // uv[0] t0 uv[2499]
+        
         let m = new THREE.Matrix4();
+
         m.setPosition(
           this.positions[index * 3],
           this.positions[index * 3 + 1],
           this.positions[index * 3 + 2]
         );
-        this.instancesMesh.setMatrixAt(index, m);
+        
+        this.instancesMesh.setMatrixAt(index, m); // 0th square to 2499th square
       }
     }
 
