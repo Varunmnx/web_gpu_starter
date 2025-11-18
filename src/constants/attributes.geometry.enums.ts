@@ -1,3 +1,4 @@
 export enum GeometryAttribute {
-    aPixelUV = 'aPixelUV',
+  aPixelUV = "aPixelUV",
+  aRandom = "aRandom",
 }

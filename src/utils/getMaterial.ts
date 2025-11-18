@@ -52,7 +52,9 @@ export function getMaterial({
       uTexture,
       attribute(GeometryAttribute.aPixelUV)
     );
-    const brightness = pow(textureColor.r, 2.2);
+    const brightness = pow(textureColor.r, 2.2).add(
+      attribute(GeometryAttribute.aRandom).mul(0.01)
+    );
 
     const asciiUV = vec2(
       uv()
@@ -66,7 +68,7 @@ export function getMaterial({
     finalColor = mix(finalColor, uColor3, step(0.4, brightness));
     finalColor = mix(finalColor, uColor4, step(0.6, brightness));
     finalColor = mix(finalColor, uColor5, step(0.6, brightness));
-    return asciiColor;
+    return asciiColor.mul(finalColor);
   });
   material.colorNode = asciiCode();
   return material;
