@@ -45,7 +45,7 @@ export default class Sketch {
       0.01,
       1000
     );
-    this.camera.position.set(0, 0, 10);
+    this.camera.position.set(0, 0, 15);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.isPlaying = true;
     this.time = 0;
@@ -109,10 +109,9 @@ export default class Sketch {
       asciiTexture: this.createAsciiTexture(),
       length: this.length,
     });
-    this.material.side = THREE.DoubleSide;
 
-    let rows = 100;
-    let columns = 100;
+    let rows = 180;
+    let columns = 180;
     let instances = rows * columns;
     let size = 0.1;
     this.geometry = new THREE.PlaneGeometry(size, size, 1, 1);
@@ -150,7 +149,7 @@ export default class Sketch {
 
         this.instancesMesh.setMatrixAt(index, m); // 0th square to 2499th square
 
-        random[index] = Math.pow(Math.random(), 20);
+        random[index] = Math.pow(Math.random(), 4);
       }
     }
 
