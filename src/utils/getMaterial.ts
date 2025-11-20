@@ -23,8 +23,8 @@ import {
   ShaderNodeObject,
   floor,
 } from "three/tsl";
-import * as THREE from "three/webgpu";
-import portrait from "../assets/natalie_portman.jpg";
+import { TextureLoader, NodeMaterial, Texture } from "three/webgpu";
+import portrait from "../assets/mohanlal.png";
 import { GeometryAttribute } from "../constants/attributes.geometry.enums";
 import MathNode from "three/src/nodes/math/MathNode.js";
 
@@ -35,11 +35,11 @@ export function getMaterial({
   asciiTexture,
   length,
 }: {
-  asciiTexture: THREE.Texture;
+  asciiTexture: Texture;
   length: number;
 }) {
-  const uTexture = new THREE.TextureLoader().load(portrait);
-  const material = new THREE.NodeMaterial();
+  const uTexture = new TextureLoader().load(portrait);
+  const material = new NodeMaterial();
 
   const uColor1 = uniform(color(palette[0])); // color changes hex color code to three.js compatible color code
   const uColor2 = uniform(color(palette[1]));
@@ -52,7 +52,7 @@ export function getMaterial({
       uTexture,
       attribute(GeometryAttribute.aPixelUV)
     );
-    const brightness = pow(textureColor.r, 2.2).add(
+    const brightness = pow(textureColor.r, 1.4).add(
       attribute(GeometryAttribute.aRandom).mul(0.01)
     );
 
