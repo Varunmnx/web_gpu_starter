@@ -109,7 +109,7 @@ export default class Sketch {
       asciiTexture: this.createAsciiTexture(),
       length: this.length,
     });
-
+ this.material.side = THREE.DoubleSide;
     let rows = 180;
     let columns = 180;
     let instances = rows * columns;
